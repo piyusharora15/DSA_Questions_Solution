@@ -1,9 +1,38 @@
 // Problem Link: https://leetcode.com/problems/binary-tree-zigzag-level-order-traversal?envType=problem-list-v2&envId=wo7dda2m
 
-// Approach: Level Order Traversal.
-// We can use a boolean variable to keep track of the direction of traversal. If the variable is true, we will add the nodes to the current level list from left to right, otherwise we will add the nodes from right to left. After processing each level, we will toggle the boolean variable.We can use a queue to perform the level order traversal. We will add the root node to the queue and then process each level until the queue is empty.We will also need to keep track of the number of nodes at the current level, so we can process all nodes at that level before moving on to the next level.We will create a list of lists to store the result, where each inner list represents a level of the tree. We will add the current level list to the result list after processing each level.
+/*
 
-// Code:
+Given the root of a binary tree, return the zigzag level order traversal of its nodes' values' (i.e., from left to right, then right to left for the next level and alternate between).
+
+Example 1:
+Input: root = [3,9,20,null,null,15,7]
+Output: [[3],[20,9],[15,7]]
+
+Example 2:
+Input: root = [1]
+Output: [[1]]
+
+Example 3:
+Input: root = []
+Output: []
+
+
+Approach: Using BFS (Breadth First Search).
+
+1. First we will check if the root is null, if it is then we will return an empty list.
+2. We will create a queue to store the nodes of the tree and a list to store the result.
+3. We will add the root node to the queue and a boolean variable to keep track of the direction of traversal (left to right or right to left).
+4. We will run a while loop until the queue is empty.
+5. Inside the while loop, we will get the size of the queue (number of nodes at the current level) and create a list to store the values of the nodes at the current level.
+6. We will run a for loop from 0 to size-1 to process each node at the current level.
+7. Inside the for loop, we will remove the front node from the queue and add its value to the list of values for the current level.
+8. We will then add the left and right children of the current node to the queue if they are not null.
+9. After processing all the nodes at the current level, we will check the direction of traversal and reverse the list of values if the direction is right to left.
+10. We will add the list of values for the current level to the result list and toggle the direction for the next level.
+
+
+Code:
+
 class Solution {
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
         List<List<Integer>> result = new ArrayList<>();
@@ -16,17 +45,12 @@ class Solution {
         boolean leftToRight = true;
         
         while (!queue.isEmpty()) {
-            int levelSize = queue.size();
-            List<Integer> currentLevel = new ArrayList<>();
+            int size = queue.size();
+            List<Integer> levelValues = new ArrayList<>();
             
-            for (int i = 0; i < levelSize; i++) {
+            for (int i = 0; i < size; i++) {
                 TreeNode currentNode = queue.poll();
-                
-                if (leftToRight) {
-                    currentLevel.add(currentNode.val);
-                } else {
-                    currentLevel.add(0, currentNode.val); // Add to the front for right to left
-                }
+                levelValues.add(currentNode.val);
                 
                 if (currentNode.left != null) {
                     queue.offer(currentNode.left);
@@ -36,7 +60,10 @@ class Solution {
                 }
             }
             
-            result.add(currentLevel);
+            if (!leftToRight) {
+                Collections.reverse(levelValues);
+            }
+            result.add(levelValues);
             leftToRight = !leftToRight; // Toggle the direction
         }
         
@@ -44,5 +71,10 @@ class Solution {
     }
 }
 
-// Time Complexity: O(n), where n is the number of nodes in the tree. We visit each node exactly once.
-// Space Complexity: O(n), where n is the number of nodes in the tree. In the worst case, we may have to store all nodes in the queue at once (e.g., if the tree is a complete binary tree). Additionally, we are storing the result in a list of lists, which also takes O(n) space.
+
+
+Time Complexity: O(n) where n is the number of nodes in the binary tree, as we need to visit each node once.
+
+Space Complexity: O(n) in the worst case when the binary tree is completely unbalanced (like a linked list), and O(w) where w is the maximum width of the tree in the best case (when the tree is balanced).
+
+*/
