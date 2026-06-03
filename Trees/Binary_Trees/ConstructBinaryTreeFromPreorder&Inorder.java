@@ -1,28 +1,65 @@
 // Problem Link: https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal?envType=problem-list-v2&envId=tree
 
-// Approach: Recursive Mapping with HashMap.
-// We can use the property of preorder and inorder traversals to construct the binary tree. The first element of the preorder traversal is the root of the tree. We can find this root in the inorder traversal to determine the left and right subtrees. We can then recursively construct the left and right subtrees using the corresponding segments of the preorder and inorder arrays.We can optimize the search for the root in the inorder array by using a HashMap to store the indices of the values in the inorder array, allowing us to find the index in O(1) time.
+/*
 
-// Code:
+Company Tags: Amazon, Apple, Facebook, Google, Microsoft.
+
+Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree.
+
+Example 1:
+Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
+Output: [3,9,20,null,null,15,7]
+
+Example 2:
+Input: preorder = [-1], inorder = [-1]
+Output: [-1]
+
+
+Approach: Using Preorder Traversal and HashMap.
+
+1. First, we will create a HashMap to store the index of each value in the inorder array for O(1) access.
+2. We will use a recursive helper function to construct the tree. 
+The function will take the current range of the preorder and inorder arrays as parameters.
+3. The first element of the preorder array will be the root of the current subtree. 
+We will find the index of this root in the inorder array using our HashMap.
+4. We will then recursively construct the left and right subtrees using the corresponding ranges in the preorder and inorder arrays.
+5. Finally, we will return the constructed tree.
+
+
+Code:
+
 class Solution {
-    int index = 0;
+    private int preIndex = 0;
+    private Map<Integer, Integer> inorderIndexMap = new HashMap<>();
+
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-        Map<Integer,Integer> map = new HashMap<>();
-        for(int i=0;i<inorder.length;i++){
-            map.put(inorder[i],i);
+        for (int i = 0; i < inorder.length; i++) {
+            inorderIndexMap.put(inorder[i], i);
         }
-        return helper(preorder,0,inorder.length-1,map);
+        return buildTreeHelper(preorder, 0, inorder.length - 1);
     }
-    private TreeNode helper(int[] preorder, int start, int end, Map<Integer,Integer> map){
-        if(start > end) return null;
-        int rootVal = preorder[index++];
-        TreeNode node = new TreeNode(rootVal);
-        int inorderIndex = map.get(rootVal);
-        node.left = helper(preorder,start,inorderIndex-1,map);
-        node.right = helper(preorder,inorderIndex+1,end,map);
-        return node;
+
+    private TreeNode buildTreeHelper(int[] preorder, int inStart, int inEnd) {
+        if (inStart > inEnd) {
+            return null;
+        }
+
+        int rootVal = preorder[preIndex++];
+        TreeNode root = new TreeNode(rootVal);
+
+        int inIndex = inorderIndexMap.get(rootVal);
+
+        root.left = buildTreeHelper(preorder, inStart, inIndex - 1);
+        root.right = buildTreeHelper(preorder, inIndex + 1, inEnd);
+
+        return root;
     }
 }
 
-// Time Complexity: O(n) - We visit each node once to construct the tree.
-// Space Complexity: O(n) - The space used by the map and the recursive call stack.
+
+Time Complexity: O(n), where n is the number of nodes in the tree. We visit each node once to construct the tree.
+
+Space Complexity: O(n), where n is the number of nodes in the tree. 
+The space complexity is due to the HashMap storing the indices of the inorder traversal and the recursive call stack in the worst case (when the tree is skewed).
+
+*/
