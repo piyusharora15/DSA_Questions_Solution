@@ -1,48 +1,69 @@
 // Problem Link: https://leetcode.com/problems/convert-sorted-list-to-binary-search-tree?envType=problem-list-v2&envId=wo7dda2m
 
-// Approach: We can use the fast and slow pointer technique to find the middle element of the linked list, which will be the root of the BST. The left half of the linked list will form the left subtree, and the right half will form the right subtree. We can recursively apply this process to construct the entire BST.We will also need to disconnect the left half from the middle node to avoid cycles in the linked list.We will define a helper function that takes the head of the linked list and returns the root of the BST.We will find the middle node using the fast and slow pointer technique, create a new TreeNode with the value of the middle node, and then recursively call the helper function for the left and right halves of the linked list to construct the left and right subtrees.
+/*
 
-// Code:
+Given the head of a singly linked list where elements are sorted in ascending order, convert it to a height-balanced binary search tree.
+
+A height-balanced binary tree is a binary tree in which the depth of the two subtrees of every node never differs by more than one.
+
+Example 1:
+Input: head = [-10,-3,0,5,9]
+Output: [0,-3,9,-10,null,5]
+
+Example 2:
+Input: head = []
+Output: []
+
+
+Approach:
+
+1. First, we need to find the middle element of the linked list, which will be the root of the BST. 
+We can use the slow and fast pointer technique to find the middle element efficiently.
+
+2. Once we have the middle element, we can create a new TreeNode with that value.
+
+3. We then recursively build the left subtree using the left half of the linked list and the right subtree using the right half of the linked list.
+
+4. The base case for the recursion will be when the head of the linked list is null, in which case we return null.
+
+5. Finally, we return the root of the constructed BST.
+
+
+Code:
+
 class Solution {
     public TreeNode sortedListToBST(ListNode head) {
         if (head == null) {
             return null;
         }
-        
-        return convertToBST(head);
-    }
-    
-    private TreeNode convertToBST(ListNode head) {
-        if (head == null) {
-            return null;
-        }
-        
-        ListNode slow = head;
+
+        ListNode slow = head;  // Find the middle element of the linked list
         ListNode fast = head;
         ListNode prev = null;
         
-        // Find the middle node using the fast and slow pointer technique
         while (fast != null && fast.next != null) {
             prev = slow;
             slow = slow.next;
             fast = fast.next.next;
         }
         
-        // The middle node is the root of the BST
-        TreeNode root = new TreeNode(slow.val);
+        TreeNode root = new TreeNode(slow.val);  // The middle element is the root of the BST
         
-        // Disconnect the left half from the middle node
-        if (prev != null) {
-            prev.next = null;
+        if (prev != null) {  // If there is a left half, recursively build the left subtree
+            prev.next = null; // Break the linked list
+            root.left = sortedListToBST(head);
         }
         
-        // Recursively construct the left and right subtrees
-        root.left = convertToBST(head);
-        root.right = convertToBST(slow.next);
+        root.right = sortedListToBST(slow.next); // Recursively build the right subtree
         
         return root;
     }
 }
 
-// Time Complexity: O(n log n) - We are finding the middle node for each recursive call, which takes O(n) time, and we are making log n recursive calls due to the division of the linked list.
-// Space Complexity: O(log n) - The space complexity is O(log n) due to the recursive call stack, which will be at most log n levels deep for a balanced BST.
+
+Time Complexity: O(n), where n is the number of nodes in the linked list. 
+We visit each node once to find the middle and construct the BST.
+
+Space Complexity: O(log n) on average, due to the recursive stack space used for constructing the BST.
+
+*/
