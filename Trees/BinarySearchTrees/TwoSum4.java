@@ -1,16 +1,34 @@
 // Problem Link: https://leetcode.com/problems/two-sum-iv-input-is-a-bst?envType=problem-list-v2&envId=wo7dda2m
 
-// Approach 1: Using HashSet.
-// We can use a HashSet to store the values of the nodes we have visited. For each node, we check if the complement (target - current node's value) exists in the HashSet. If it does, we return true. If not, we add the current node's value to the HashSet and continue traversing the tree.We can perform a depth-first search (DFS) or breadth-first search (BFS) to traverse the tree.
+/*
 
-// Code:
+Given the root of a binary search tree and an integer k, return true if there exist two elements in the BST such that their sum is equal to k, or false otherwise.
+
+Example 1:
+Input: root = [5,3,6,2,4,null,7], k = 9
+Output: true
+
+Example 2:
+Input: root = [5,3,6,2,4,null,7], k = 28
+Output: false
+
+
+Approach 1: Using HashSet.
+
+1. First, we will traverse the tree and store the values of the nodes in a HashSet.
+2. Then, we will traverse the tree again and for each node, we will check if (k - node.val) exists in the HashSet.
+3. If it exists, we will return true. If we finish traversing the tree and do not find such a pair, we will return false.
+
+
+Code:
+
 class Solution {
     public boolean findTarget(TreeNode root, int k) {
-        Set<Integer> set = new HashSet<>();
+        HashSet<Integer> set = new HashSet<>();
         return dfs(root, set, k);
     }
     
-    private boolean dfs(TreeNode node, Set<Integer> set, int k) {
+    private boolean dfs(TreeNode node, HashSet<Integer> set, int k) {
         if (node == null) {
             return false;
         }
@@ -25,13 +43,26 @@ class Solution {
     }
 }
 
-// Time Complexity: O(n), where n is the number of nodes in the tree, since we visit each node once.
-// Space Complexity: O(n), in the worst case, the HashSet can contain all the node values, and the recursion stack can also go as deep as the height of the tree, which can be O(n) in the worst case (for a skewed tree).
+Time Complexity: O(n), where n is the number of nodes in the tree. 
+We traverse the tree once to store the values in the HashSet and once to check for the pairs.
 
-// Approach 2: Using Inorder Traversal and Two Pointers.
-// We can perform an inorder traversal of the BST to get a sorted list of the node values. Then, we can use the two-pointer technique to find if there are two numbers in the sorted list that add up to the target k.We can initialize two pointers, one at the beginning of the list and one at the end. We can calculate the sum of the values at these two pointers. If the sum is equal to k, we return true. If the sum is less than k, we move the left pointer to the right to increase the sum. If the sum is greater than k, we move the right pointer to the left to decrease the sum. We continue this process until the pointers meet.
+Space Complexity: O(n), where n is the number of nodes in the tree. 
+In the worst case, we may store all the node values in the HashSet.
 
-// Code:
+
+Approach 2: Using Inorder Traversal and Two Pointers.
+
+1. First, we will perform an inorder traversal of the BST to get a sorted list of the node values.
+2. Then, we will use two pointers, one starting at the beginning of the list and the other starting at the end of the list.
+3. We will check the sum of the values at the two pointers. 
+If the sum is equal to k, we will return true. 
+If the sum is less than k, we will move the left pointer to the right. 
+If the sum is greater than k, we will move the right pointer to the left.
+4. If the two pointers meet and we do not find such a pair, we will return false.
+
+
+Code:
+
 class Solution {
     public boolean findTarget(TreeNode root, int k) {
         List<Integer> list = new ArrayList<>();
@@ -65,5 +96,11 @@ class Solution {
     }
 }
 
-// Time Complexity: O(n), where n is the number of nodes in the tree, since we visit each node once during the inorder traversal and then we use two pointers to find the target sum.
-// Space Complexity: O(n), in the worst case, the list can contain all the node values, and the recursion stack can also go as deep as the height of the tree, which can be O(n) in the worst case (for a skewed tree).
+
+Time Complexity: O(n), where n is the number of nodes in the tree. 
+We traverse the tree once to perform the inorder traversal and once to check for the pairs using the two pointers.
+
+Space Complexity: O(n), where n is the number of nodes in the tree. 
+In the worst case, we may store all the node values in the list during the inorder traversal.
+
+*/
