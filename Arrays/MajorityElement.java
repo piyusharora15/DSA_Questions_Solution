@@ -15,59 +15,76 @@ Example 2:
 Input: nums = [2,2,1,1,1,2,2]
 Output: 2
 
-*/
 
-// Approach 1: HashMap to count occurrences.
-// We can use a HashMap to count the occurrences of each element in the array.
-// The element with the count greater than n/2 is the majority element.
+Approach 1: HashMap.
 
-// Code:
-/*
+1. First we will create a HashMap to store the frequency of each element in the array.
+2. We will iterate through the array and for each element, we will update its frequency in the HashMap.
+3. After we have the frequency of each element, we will iterate through the HashMap to find the element that has a frequency greater than n/2, where n is the size of the array.
+4. We will return that element as the majority element.
+
+
+Code:
 
 class Solution {
     public int majorityElement(int[] nums) {
+        HashMap<Integer, Integer> frequencyMap = new HashMap<>();
         int n = nums.length;
-        Map<Integer,Integer> mpp = new HashMap<>();
-        for(int i=0;i<n;i++){
-            mpp.put(nums[i],mpp.getOrDefault(nums[i],0) + 1);
+
+        for (int num : nums) {  // Count the frequency of each element
+            frequencyMap.put(num, frequencyMap.getOrDefault(num, 0) + 1);
         }
-        for(Map.Entry<Integer,Integer> it: mpp.entrySet()){
-            if(it.getValue() > (n/2)){
-                return it.getKey();
+
+        for (Map.Entry<Integer, Integer> entry : frequencyMap.entrySet()) {  // Find the majority element
+            if (entry.getValue() > n / 2) {
+                return entry.getKey();
             }
         }
-        return -1;
+
+        return -1;  // This line will never be reached since the majority element always exists
     }
 }
+
+Time Complexity: O(n) - We traverse the array once to count frequencies and then traverse the HashMap to find the majority element.
+
+Space Complexity: O(n) - In the worst case, all elements in the array are different, and we will store all of them in the HashMap.
+
+
+Approach 2: Boyer-Moore Voting Algorithm.
+
+1. We will maintain two variables: `candidate` to store the current candidate for the majority element and `count` to store the count of the candidate.
+2. We will iterate through the array and for each element, we will check if it is the same as the current candidate. 
+If it is, we will increment the count. If it is not, we will decrement the count.
+3. If the count becomes zero, we will update the candidate to the current element and reset the count to 1.
+4. After we have iterated through the array, the candidate will be the majority element, and we will return it.
+
+
+Time Complexity: O(n) - We traverse the array once to find the majority element.
+
+Space Complexity: O(1) - We are using only a constant amount of extra space to store the candidate and count.
+
 
 */
 
-// Time Complexity: O(n)
-// Space Complexity: O(n)
-
-
-// Approach 2: Boyer-Moore Voting Algorithm.
-// This algorithm works by maintaining a count and a candidate for the majority element. 
-// We increment the count when we see the candidate and decrement it when we see a different element. 
-// When the count reaches zero, we change the candidate to the current element. 
-// At the end, the candidate will be the majority element.
 
 // Code:
+
 class MajorityElement {
     public int majorityElement(int[] nums) {
-        int n = nums.length;
-        int cnt = 0,ele = 0;
-        for(int i=0;i<n;i++){
-            if(cnt == 0){
-                cnt = 1;
-                ele = nums[i];
+        int candidate = 0;
+        int count = 0;
+
+        for (int num : nums) {
+            if (count == 0) {
+                candidate = num;  // Update candidate
+                count = 1;        // Reset count
+            } else if (num == candidate) {
+                count++;          // Increment count if current element is same as candidate
+            } else {
+                count--;          // Decrement count if current element is different from candidate
             }
-            else if(nums[i] == ele) cnt++;
-            else cnt--;
         }
-        return ele;
+
+        return candidate;  // The candidate is the majority element
     }
 }
-
-// Time Complexity: O(n)
-// Space Complexity: O(1)
