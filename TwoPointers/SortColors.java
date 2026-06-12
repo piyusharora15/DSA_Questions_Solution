@@ -1,55 +1,102 @@
 // Problem Link: https://leetcode.com/problems/sort-colors
 
-// Approach1: Counting Sort.
-// We can count the number of 0s, 1s and 2s in the array and then overwrite the original array based on the counts.
+/*
 
-// Code:
+Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.
+
+We will use the integers 0, 1, and 2 to represent the color red, white, and blue, respectively.
+
+You must solve this problem without using the library's sort function.
+
+Example 1:
+Input: nums = [2,0,2,1,1,0]
+Output: [0,0,1,1,2,2]
+
+Example 2:
+Input: nums = [2,0,1]
+Output: [0,1,2]
+
+
+Approach 1: Using Counting Sort.
+
+1. First, we count the number of occurrences of each color (0s, 1s, and 2s) in the input array.
+2. Then, we overwrite the input array with the counted values in the correct order (0s first, followed by 1s, and then 2s).
+
+
+Code:
+
 class Solution {
     public void sortColors(int[] nums) {
-        int cnt0 = 0,cnt1 = 0,cnt2 = 0;
-        for(int i=0;i<nums.length;i++){
-            if(nums[i] == 0) cnt0++;
-            else if(nums[i] == 1) cnt1++;
-            else cnt2++;
+        int count0 = 0, count1 = 0, count2 = 0;
+
+        for (int num : nums) {  // Count the occurrences of each color
+            if (num == 0) {
+                count0++;
+            } else if (num == 1) {
+                count1++;
+            } else {
+                count2++;
+            }
         }
-        for(int i=0;i<cnt0;i++) nums[i] = 0;
-        for(int i=cnt0;i<cnt0+cnt1;i++) nums[i] = 1;
-        for(int i=cnt0+cnt1;i<nums.length;i++) nums[i] = 2;
+
+        int index = 0;  // Overwrite the input array with the counted values
+        for (int i = 0; i < count0; i++) {
+            nums[index++] = 0;
+        }
+        for (int i = 0; i < count1; i++) {
+            nums[index++] = 1;
+        }
+        for (int i = 0; i < count2; i++) {
+            nums[index++] = 2;
+        }
     }
 }
 
-// Time Complexity: O(n)
-// Space Complexity: O(1)
+Time Complexity: O(n) - We traverse the array twice, once for counting and once for overwriting.
 
-// Optimal Approach: Dutch National Flag Algorithm.
-// We can maintain three pointers to keep track of the positions of 0s, 1s and 2s and swap elements accordingly.
-// We will have three pointers: low, mid, and high.
-// low will point to the next position to place 0, mid will traverse the array, and high will point to the next position to place 2. When mid encounters a 0, we swap it with the element at low and increment both low and mid. When mid encounters a 1, we just increment mid. When mid encounters a 2, we swap it with the element at high and decrement high. We continue this process until mid exceeds high.
+Space Complexity: O(1) - We use a constant amount of extra space for counting the occurrences of each color.
+
+
+Approach 2: Using the Dutch National Flag Algorithm (Three Pointers).
+
+1. First we initialize three pointers: `low` for the next position of 0, `mid` for the current element being processed, and `high` for the next position of 2.
+2. We iterate through the array with the `mid` pointer:
+   - If the current element is 0, we swap it with the element at the `low` pointer and move both `low` and `mid` pointers forward.
+   - If the current element is 1, we simply move the `mid` pointer forward.
+   - If the current element is 2, we swap it with the element at the `high` pointer and move the `high` pointer backward.
+3. We continue this process until the `mid` pointer exceeds the `high` pointer.
+
+
+Time Complexity: O(n) - We traverse the array at most once.
+
+Space Complexity: O(1) - We use a constant amount of extra space for the three pointers.
+
+
+*/
 
 // Code:
-class Solution {
+
+class SortColors {
     public void sortColors(int[] nums) {
-        int low=0,mid=0,high=nums.length-1;
-        while(mid <= high){
-            if(nums[mid] == 0){
-                int temp = nums[mid];
-                nums[mid] = nums[low];
-                nums[low] = temp;
-                mid++;
+        int low = 0, mid = 0, high = nums.length - 1;
+
+        while (mid <= high) {
+            if (nums[mid] == 0) {
+                swap(nums, low, mid);
                 low++;
-            }
-            else if(nums[mid] == 1){
                 mid++;
-            }
-            else{
-                int temp = nums[mid];
-                nums[mid] = nums[high];
-                nums[high] = temp;
+            } else if (nums[mid] == 1) {
+                mid++;
+            } else {
+                swap(nums, mid, high);
                 high--;
             }
         }
     }
-}
 
-// Time Complexity: O(n)
-// Space Complexity: O(1)
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+}
