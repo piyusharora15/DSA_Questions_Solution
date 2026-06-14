@@ -24,15 +24,20 @@ Input: nums = [5,4,-1,7,8]
 Output: 23
 Explanation: The subarray [5,4,-1,7,8] has the largest sum 23.
 
-*/
-
-/* 
+ 
 
 Approach 1: Brute Force -> Try out all subarrays.
 
-We can use two nested loops to generate all possible subarrays and calculate their sums, keeping track of the maximum sum found. This approach has a time complexity of O(n^2).
+1. Initialize a variable res to store the maximum sum encountered so far. Set it to the first element of the array.
+2. Iterate through the array using two nested loops. 
+The outer loop will represent the starting index of the subarray, and the inner loop will represent the ending index of the subarray.
+3. For each pair of starting and ending indices, calculate the sum of the subarray by iterating through the elements between the two indices and adding them up.
+4. Update the res variable if the calculated sum is greater than the current value of res.
+5. After iterating through all possible subarrays, return the value of res, which will be the maximum sum of any subarray in the given array.
+
 
 Code:
+
 class MaximumSubarray {
     public int maxSubArray(int[] nums) {
         int n = nums.length;
@@ -48,9 +53,12 @@ class MaximumSubarray {
     }
 }
 
-*/
+Time Complexity: O(n^2), where n is the length of the input array. This is because we have two nested loops, each iterating through the array.
 
-/* Approach 2: Optimal Kadane's Algorithm (Way 1).
+Space Complexity: O(1), as we are using only a constant amount of extra space.
+
+
+Optimal Approach: Kadane's Algorithm.
 
 The idea of Kadane's algorithm is to traverse over the array from left to right and for each element, find the maximum sum among all subarrays ending at that element. 
 The result will be the maximum of all these values. 
@@ -61,7 +69,7 @@ So for any element, we have two choices:
 
 Choice 1: Extend the maximum sum subarray ending at the previous element by adding the current element to it. If the maximum subarray sum ending at the previous index is positive, then it is always better to extend the subarray.
 
-Choice 2: Start a new subarray starting from the current element. If the maximum subarray sum ending at the previous index is negative, it is always better to start a new subarray from the current element
+Choice 2: Start a new subarray starting from the current element. If the maximum subarray sum ending at the previous index is negative, it is always better to start a new subarray from the current element.
 
 This means that maxEnding at index i = max(maxEnding at index (i - 1) + arr[i], arr[i]) and the maximum value of maxEnding at any index will be our answer.
 
@@ -88,6 +96,37 @@ We repeat steps 3 to 5 for each element in the array.
 After iterating through the entire array, the variable 'maxSum' will contain the maximum subarray sum encountered.
 
 Finally, we return the value of 'maxSum' as the result, representing the maximum sum of a contiguous subarray within the given array nums.
+
+
+Dry Run:
+Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+- Initialize maxSum = Integer.MIN_VALUE, currentSum = 0
+- Iterate through the array:
+    - currentSum = 0 + (-2) = -2, maxSum = max(-2, Integer.MIN_VALUE) = -2
+        currentSum < 0, so reset currentSum to 0
+    - currentSum = 0 + 1 = 1, maxSum = max(1, -2) = 1
+        currentSum >= 0, continue
+    - currentSum = 1 + (-3) = -2, maxSum = max(-2, 1) = 1
+        currentSum < 0, so reset currentSum to 0
+    - currentSum = 0 + 4 = 4, maxSum = max(4, 1) = 4
+        currentSum >= 0, continue
+    - currentSum = 4 + (-1) = 3, maxSum = max(3, 4) = 4
+        currentSum >= 0, continue
+    - currentSum = 3 + 2 = 5, maxSum = max(5, 4) = 5
+        currentSum >= 0, continue
+    - currentSum = 5 + 1 = 6, maxSum = max(6, 5) = 6
+        currentSum >= 0, continue
+    - currentSum = 6 + (-5) = 1, maxSum = max(1, 6) = 6
+        currentSum >= 0, continue
+    - currentSum = 1 + 4 = 5, maxSum = max(5, 6) = 6
+        currentSum >= 0, continue
+- End of iteration, return maxSum = 6
+
+
+Time Complexity: O(n), where n is the length of the input array. We traverse the array once.
+
+Space Complexity: O(1), as we are using only a constant amount of extra space.
+
 
 */
 
@@ -129,9 +168,6 @@ class MaximumSubarray {
 }
 
 */
-
-// Time Complexity: O(n), where n is the length of the input array.
-// Space Complexity: O(1), as we are using only a constant amount of extra space.
 
 
 /*
