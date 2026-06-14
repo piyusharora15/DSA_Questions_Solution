@@ -1,3 +1,6 @@
+// Problem Link: https://leetcode.com/problems/two-sum/
+
+
 /*
 
 Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
@@ -19,15 +22,27 @@ Example 3:
 Input: nums = [3,3], target = 6
 Output: [0,1]
 
+Brute Force Approach:
+1. Iterate through each element x and find if there is another value that equals to target - x.
+2. Take two nested loops to check for each pair of numbers if they add up to the target.
+
+Time Complexity: O(n^2) - We traverse the array twice.
+Space Complexity: O(1) - We are not using any extra space.
+
+
+Optimal Approach: Using Hash Map.
+
+1. First, we create a hash map to store the numbers and their indices.
+2. Then, we iterate through the array and for each number, we calculate its complement by subtracting it from the target.
+3. We check if the complement exists in the hash map. If it does, we return the indices of the current number and its complement.
+4. If the complement does not exist, we add the current number and its index to the hash map.
+5. If we finish iterating through the array without finding a pair, we return [-1, -1] to indicate that no solution was found.
+
+
+Time Complexity: O(n) - We traverse the array once.
+Space Complexity: O(n) - In the worst case, we could be storing all n elements in the hash map.
+
 */
-
-// Solution 1: Brute Force
-// We can use two nested loops to check every pair of numbers in the array and see if they add up to the target. This approach has a time complexity of O(n^2).
-
-// Solution 2: Hash Map
-// We can use a hash map to store the values we have seen so far and their indices. 
-// For each element in the array, we check if the complement (target - current element) exists in the hash map. 
-// If it does, we have found our pair. This approach has a time complexity of O(n).
 
 // Code:
 import java.util.HashMap;
@@ -44,6 +59,3 @@ public class TwoSum {
         return new int[] { -1, -1 };
     }
 }
-
-// Time Complexity: O(n) - We traverse the array once.
-// Space Complexity: O(n) - In the worst case, we could be storing all n elements in the hash map.
