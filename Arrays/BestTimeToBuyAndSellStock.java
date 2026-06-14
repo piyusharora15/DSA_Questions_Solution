@@ -9,64 +9,75 @@ You want to maximize your profit by choosing a single day to buy one stock and c
 Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
 
 Example 1:
-
 Input: prices = [7,1,5,3,6,4]
 Output: 5
 Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
 Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
 
 Example 2:
-
 Input: prices = [7,6,4,3,1]
 Output: 0
 Explanation: In this case, no transactions are done and the max profit = 0.
 
-*/
 
+Brute Force Approach:
+1. We can use two nested loops to iterate through the array and calculate the profit for every possible pair of buy and sell days.
+2. We will keep track of the maximum profit encountered during the iterations and return it at the end.
 
-// Brute Force Approach: Checking all possible pairs of buy and sell days.
-// We take each day as a buying day and check all subsequent days as selling days to find the maximum profit.
+Code:
 
-// Code:
-    /*
+class Solution {
     public int maxProfit(int[] prices) {
-        int max = 0;
-        for(int i=0;i<prices.length;i++){
-            for(int j=i+1;j<prices.length;j++){
+        int maxProfit = 0;
+        for (int i = 0; i < prices.length; i++) {
+            for (int j = i + 1; j < prices.length; j++) {
                 int profit = prices[j] - prices[i];
-                max = Math.max(max,profit);
+                if (profit > maxProfit) {
+                    maxProfit = profit;
+                }
             }
         }
-        return max;
-    }
-    */
-
-// Time Complexity: O(n^2)
-// Space Complexity: O(1)
-
-// Optimal Approach: Single Pass.
-// We keep track of the minimum price encountered so far and calculate the potential profit at each step.
-// We update the maximum profit whenever we find a higher potential profit.
-// We iterate through the array once, updating the minimum price and maximum profit as we go.
-// This approach ensures that we are always buying at the lowest price and selling at the highest price encountered after that.
-
-// Code:
-class BestTimeToBuyAndSellStock {
-    public int maxProfit(int[] prices) {
-        int minPrice = Integer.MAX_VALUE;
-        int max = 0;
-        for(int price : prices){
-            if(price < minPrice){
-                minPrice = price;
-            }
-            int profit = price - minPrice;
-            if(profit > max){
-                max = profit;
-            }
-        }
-        return max;
+        return maxProfit;
     }
 }
 
-// Time Complexity: O(n), where n is the number of days (length of the prices array).
-// Space Complexity: O(1), as we are using only a constant amount of extra space to store the minimum price and maximum profit.
+Time Complexity: O(n^2) - We have two nested loops, each iterating through the array.
+Space Complexity: O(1) - We are using a constant amount of extra space to store the maximum profit.
+
+
+Optimal Approach: Using a Single Pass:
+
+1.First, we initialize two variables: minPrice to store the minimum price encountered so far (initialized to Integer.MAX_VALUE) and maxProfit to store the maximum profit (initialized to 0).
+2.We iterate through the prices array once. For each price:
+   a. We update minPrice if the current price is lower than minPrice.
+   b. We calculate the potential profit by subtracting minPrice from the current price.
+   c. If the calculated profit is greater than maxProfit, we update maxProfit.
+3. After iterating through the array, we return maxProfit.
+
+
+Time Complexity: O(n) - We traverse the array once.
+
+Space Complexity: O(1) - We are using a constant amount of extra space to store minPrice and maxProfit.
+
+
+*/
+
+
+// Code:
+
+class BestTimeToBuyAndSellStock {
+    public int maxProfit(int[] prices) {
+        int minPrice = Integer.MAX_VALUE;
+        int maxProfit = 0;
+
+        for (int price : prices) {
+            if (price < minPrice) {
+                minPrice = price; // Update minPrice if current price is lower
+            } else if (price - minPrice > maxProfit) {
+                maxProfit = price - minPrice; // Update maxProfit if current profit is higher
+            }
+        }
+
+        return maxProfit;
+    }
+}
