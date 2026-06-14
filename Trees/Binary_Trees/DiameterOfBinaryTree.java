@@ -41,10 +41,10 @@ class DiameterOfBinaryTree {
     }
     private int helper(TreeNode node){
         if(node == null) return 0;
-        int leftHeight = helper(node.left);
-        int rightHeight = helper(node.right);
-        diameter = Math.max(diameter,leftHeight+rightHeight);
-        return 1 + Math.max(leftHeight,rightHeight);
+        int leftHeight = helper(node.left); // Calculate the height of the left subtree
+        int rightHeight = helper(node.right); // Calculate the height of the right subtree
+        diameter = Math.max(diameter,leftHeight+rightHeight); // Update the diameter if the current diameter is greater than the previously recorded diameter
+        return 1 + Math.max(leftHeight,rightHeight); // Return the height of the current node, which is 1 (for the current node) plus the maximum height of its left and right subtrees
     }
 }
 
