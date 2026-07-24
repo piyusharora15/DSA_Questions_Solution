@@ -25,21 +25,19 @@ Output: 8
 Explanation:
 n = 9 since there are 9 numbers, so all numbers are in the range [0,9]. 8 is the missing number in the range since it does not appear in nums.
 
- */
 
- /*
+Approach 1: Using HashSet:
 
-Approach 1: Using HashSet
 1. Create a HashSet to store the numbers in the array.
 2. Iterate through the array and add each number to the HashSet.
 3. Iterate through the numbers from 0 to n and check if each number is present in the HashSet.
 4. If a number is not present in the HashSet, return that number as the missing number.
+
 Time Complexity: O(n) - We iterate through the array once to add elements to the HashSet and then iterate through the range [0, n] once to find the missing number.
+
 Space Complexity: O(n) - The HashSet can contain up to n elements in the worst case.
 
- */
-
- /*
+Code:
 
 import java.util.HashSet;
 public class MissingNumber {
@@ -56,18 +54,20 @@ public class MissingNumber {
         return -1; // This line will never be reached since there is always a missing number.
     }
 }
- */
 
- /*
 
-Approach 2: Using Gauss' Formula
+Approach 2: Using Gauss' Formula.
+
 1. Calculate the expected sum of numbers from 0 to n using the formula n*(n+1)/2.
 2. Calculate the actual sum of the numbers in the array.
 3. The missing number will be the difference between the expected sum and the actual sum.
+
 Time Complexity: O(n) - We iterate through the array once to calculate the actual sum.
+
 Space Complexity: O(1) - We only use a constant amount of extra space.
 
- */
+Code:
+
 public class MissingNumber {
 
     public int missingNumber(int[] nums) {
@@ -81,25 +81,27 @@ public class MissingNumber {
     }
 }
 
-/*
 
 Approach 3: Using XOR.
+
 1. Initialize a variable xor to 0.
 2. Iterate through the numbers from 0 to n and XOR each number with xor.
 3. Iterate through the numbers in the array and XOR each number with xor.
 4. Return the value of xor as the missing number.
+
 
 How it works:
 - XOR of a number with itself is 0 (a ^ a = 0).
 - XOR of a number with 0 is the number itself (a ^ 0 = a).
 - By XORing all numbers from 0 to n and all numbers in the array, the missing number will be the only number that is not canceled out, resulting in the missing number being the final value of xor.
 
+
 Time Complexity: O(n) - We iterate through the array once and through the range [0, n] once.
+
 Space Complexity: O(1) - We only use a constant amount of extra space.
 
- */
 
- /*
+Code:
 
 public class MissingNumber {
     public int missingNumber(int[] nums) {
@@ -114,4 +116,5 @@ public class MissingNumber {
     }
 }
 
- */
+
+*/
