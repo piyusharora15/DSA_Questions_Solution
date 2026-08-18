@@ -15,55 +15,33 @@ Output: 1
 Example 3:Input: target = 11, nums = [1,1,1,1,1,1,1,1]
 Output: 0
 
-*/
 
-// Approach 1: Brute Force Approach:
-// Try every subarray, compute its sum, track smallest length with sum ≥ target.
-// For every i from 0..n-1, run j from i..n-1, accumulate sum, when sum ≥ target update minLen.
+Optimal Approach: Sliding Window Technique.
 
-/* Code:
+1. First, we will initialize two pointers, i and j, both set to 0. We will also maintain a variable sum to keep track of the current sum of the subarray and a variable minLen to store the minimum length found so far.
+2. We will iterate through the array using the j pointer. For each element, we will add it to the sum.
+3. If the sum is greater than or equal to the target, we will update minLen with the length of the current subarray (j - i + 1) and then move the i pointer to the right, subtracting nums[i] from sum, until the sum is less than target.
+4. Finally, we will return minLen if it has been updated; otherwise, we will return 0.
 
-class Solution {
-    public int minSubArrayLen(int target, int[] nums) {
-        if(nums == null || nums.length == 0) return 0;
-        int n = nums.length;
-        int ans = Integer.MAX_VALUE;
-        for(int i=0;i<n;i++){
-            int sum = 0;
-            for(int j=i;j<n;j++){
-                sum += nums[j];
-                if(sum >= target){
-                    ans = Math.min(ans,j-i+1);
-                    break;
-                }
-            }
-        }
-        return (ans == Integer.MAX_VALUE) ? 0 : ans;
-    }
-}
+Dry Run:
+Input: target = 7, nums = [2,3,1,2,4,3]
+- Initialize i = 0, j = 0, sum = 0, minLen = 7
+- j = 0, sum = 2, minLen = 7
+- j = 1, sum = 5, minLen = 7
+- j = 2, sum = 6, minLen = 7
+- j = 3, sum = 8, minLen = 4, sum = 6, i = 1
+- j = 4, sum = 10, minLen = 4, sum = 7, i = 2
+- j = 5, sum = 10, minLen = 4, sum = 9, i = 3
+- j = 5, sum = 9, minLen = 3, sum = 7, i = 4
+- j = 5, sum = 7, minLen = 2, sum = 3, i = 5
 
-*/
-// Time Complexity: O(n^2) in worst case, gives TLE on large inputs.
-// Space Complexity: O(1)
+Output: 2
 
-/* Approach 2: Optimal Approach: Sliding Window Technique:
+Time Complexity: O(n), where n is the length of the input array.
+We are iterating through the array once with the j pointer, and the i pointer only moves forward, so the overall time complexity is linear.
 
-Initialize two pointers, i and j, to track the start and end of the current subarray, respectively. Set i and j to 0 initially.
-Initialize a variable sum to keep track of the current sum of elements in the subarray.
-Initialize a variable minLen to store the minimum length found so far. Set it to the maximum possible integer value (INT_MAX).
-Start a while loop that continues until the j pointer reaches the end of the array nums.
-Inside the loop, add the element at index j to the sum variable.
-Check if the sum is greater than or equal to the target value.
-If the condition is true, enter another while loop. This loop will handle the case where the current subarray sum is equal to or greater than the target.
-a. Decrement the sum by subtracting the element at index i.
-b. Update minLen with the minimum length found so far (j - i + 1).
-c. Increment the i pointer to move the window to the right.
-d. Repeat steps a-c until the sum is no longer greater than or equal to the target value.
-Increment the j pointer to move the window to the right.
-Repeat steps 5-8 until the j pointer reaches the end of the array.
-After the loop, check if the value of minLen is still INT_MAX, indicating that no subarray was found. In this case, return 0.
-Otherwise, return the value of minLen, which represents the minimum length of a subarray whose sum is greater than or equal to the target.
-The sliding window technique allows us to efficiently search for the minimum length subarray that satisfies the given condition. By maintaining two pointers and adjusting the window based on the sum of elements, we can avoid unnecessary computations and achieve a time complexity of O(N), where N is the size of the input array nums.
+Space Complexity: O(1), as we are using a constant amount of extra space for variables like i, j, sum, and minLen.
+
 
 */ 
 
@@ -86,5 +64,3 @@ class MinimumSizeSubarraySum {
     }
 }
 
-// Time Complexity: O(n) as each element is visited at most twice.
-// Space Complexity: O(1)
