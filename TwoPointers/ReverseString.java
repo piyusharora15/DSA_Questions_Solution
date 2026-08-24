@@ -8,14 +8,23 @@ You must do this by modifying the input array in-place with O(1) extra memory.
 Example 1:
 Input: s = ["h","e","l","l","o"]
 Output: ["o","l","l","e","h"]
+
 Example 2:
 Input: s = ["H","a","n","n","a","h"]
 Output: ["h","a","n","n","a","H"]
 
+
+Approach : Two Pointer In-Place Swap.
+
+Place left at 0 and right at n-1. Swap s[left] and s[right], then left++, right--, repeat until left >= right. In-place, constant extra memory.
+
+
+Time Complexity : O(n), where n is the length of the string.
+
+Space Complexity : O(1), constant space used.
+
 */
 
-// Approach : Two Pointer In-Place Swap.
-// Place left at 0 and right at n-1. Swap s[left] and s[right], then left++, right--, repeat until left >= right. In-place, constant extra memory.
 
 // Code:
 class ReverseString {
@@ -31,5 +40,3 @@ class ReverseString {
     }
 }
 
-// Time Complexity: O(n)
-// Space Complexity: O(1)
